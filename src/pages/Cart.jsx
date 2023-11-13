@@ -5,12 +5,14 @@ import { remove } from '../store/CartSlice'
 const Cart = () => {
 
   const getTotal = () => {
-    const sumPrice = JSON.parse(localStorage.getItem('products')).map((item) => {
-      return item.price;
-    }).reduce((acc, price) => {
-      return acc + price;
-    }, 0)
-    return sumPrice;
+    if (localStorage.getItem('products')) {
+      const sumPrice = JSON.parse(localStorage.getItem('products')).map((item) => {
+        return item.price;
+      }).reduce((acc, price) => {
+        return acc + price;
+      }, 0)
+      return sumPrice;
+    }
   };
 
   const dispatch = useDispatch();
@@ -27,6 +29,11 @@ const Cart = () => {
 
 
   useEffect(() => {
+
+    if (!localStorage.getItem("products")) {
+      localStorage.setItem('products',[])
+    }
+
     if (products.length>0) {
       localStorage.setItem('products', JSON.stringify(products))
       if (localStorage.getItem('products')) {
